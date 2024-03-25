@@ -12,32 +12,39 @@
 
 enum
 {
-	M_BUTTON_CLICKED = 'btcl'
+	M_BUTTON_CLICKED = 'btcl',
+	M_NEW_GAME = 'nwgm'
 };
 
 BString board[3][3];
 BString currentPlayer = "X";
 
 MainWindow::MainWindow(void)
-	:	BWindow(BRect(100,100,380,400),"Tic Tac Toe for Haiku",B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS)
+	:	BWindow(BRect(100,100,380,400),"Tic Tac Toe for Haiku",B_TITLED_WINDOW, B_NOT_RESIZABLE | B_ASYNCHRONOUS_CONTROLS)
 {
 
 	BRect r(Bounds());
 	r.bottom = 20;
 	fMenuBar = new BMenuBar(r,"menubar");
+	fMenu = new BMenu("Game");
+	fMenu->AddItem(new BMenuItem(
+		"New game", new BMessage(M_NEW_GAME), 'N'));
+	fMenu->AddSeparatorItem();
+	fMenu->AddItem(new BMenuItem(
+		"About Weather", new BMessage(B_ABOUT_REQUESTED)));
+	fMenu->AddItem(new BMenuItem(
+		"Quit", new BMessage(B_QUIT_REQUESTED), 'Q'));
+	fMenuBar->AddItem(fMenu);
+
 	AddChild(fMenuBar);
 
-	BStatusBar *m_status_bar = new BStatusBar("m_status_bar","0%","100%");
-	m_status_bar->Show();
-
-	AddChild(m_status_bar);
 	DrawBoard();
 }
 
+
+
 void
 MainWindow::DrawBoard() {
-	/* Create multiple buttons */
-
 	int buttonWidthHeight = 80;
 	int x = 10; // Start top left
 	int y = 30; // And below menu bar
@@ -61,7 +68,7 @@ MainWindow::DrawBoard() {
 
 			BRect buttonSize(start, size);
 			BButton *button = new BButton(buttonSize,"button",name,msg);
-			button->SetFlat(true);
+			button->SetFlat(false);
 			AddChild(button);
 		}
 	}
@@ -153,6 +160,11 @@ MainWindow::MessageReceived(BMessage *msg)
 				BAlert *message = new BAlert("Not valid", "Please click an empty button", "OK");
 				message->Go();
 			}
+		} break;
+
+		case M_NEW_GAME:
+		{
+			ResetGame();
 		} break;
 		default:
 		{

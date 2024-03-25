@@ -3,6 +3,7 @@
 
 #include <Window.h>
 #include <MenuBar.h>
+#include <Menu.h>
 
 class MainWindow : public BWindow
 {
@@ -19,6 +20,7 @@ public:
 
 private:
 			BMenuBar	*fMenuBar;
+			BMenu 		*fMenu;
 
 };
 
