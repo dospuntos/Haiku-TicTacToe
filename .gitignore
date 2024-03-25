@@ -6,7 +6,15 @@
 *.lo
 *.o
 *.obj
+objects*
 
 # Precompiled headers
 *.gch
 *.pch
+
+# Executables
+TicTacToe
+
+# IDE files
+.genio
+*.pld

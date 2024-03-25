@@ -3,7 +3,7 @@
 
 
 App::App(void)
-	:	BApplication("application/x-vnd.dw-TestApp")
+	:	BApplication("application/x-vnd.jw-TicTacToe")
 {
 	MainWindow *mainwin = new MainWindow();
 	mainwin->Show();

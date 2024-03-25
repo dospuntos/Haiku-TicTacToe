@@ -10,11 +10,11 @@ public:
 						MainWindow(void);
 			void		MessageReceived(BMessage *msg);
 			bool		QuitRequested(void);
-			void		DrawBoard(void);
-			
+			void		DrawBoard();
+
 private:
 			BMenuBar	*fMenuBar;
-	
+
 };
 
 #endif
