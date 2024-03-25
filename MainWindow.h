@@ -11,6 +11,9 @@ public:
 			void		MessageReceived(BMessage *msg);
 			bool		QuitRequested(void);
 			void		DrawBoard();
+			bool 		CheckWin();
+			void		AnnounceWinner();
+			void		ResetGame();
 
 private:
 			BMenuBar	*fMenuBar;

@@ -62,6 +62,47 @@ MainWindow::DrawBoard() {
 	}
 }
 
+// Function to check for a win
+bool MainWindow::CheckWin()
+{
+	//Check rows, columns, and diagonals
+	for (int i = 0; i < 3; i++) {
+		if (board[i][0] == currentPlayer && board[i][1] == currentPlayer && board[i][2] == currentPlayer)
+			return true;
+		if (board[0][i] == currentPlayer && board[1][i] == currentPlayer && board[2][i] == currentPlayer)
+			return true;
+	}
+	if (board[0][0] == currentPlayer && board[1][1] == currentPlayer && board[2][2] == currentPlayer)
+		return true;
+	if (board[0][2] == currentPlayer && board[1][1] == currentPlayer && board[2][0] == currentPlayer)
+		return true;
+	return false;
+}
+
+void
+MainWindow::AnnounceWinner()
+{
+	BString text;
+	text << "Player " << currentPlayer << " won the game!";
+	BAlert *message = new BAlert("Congratulations", text, "OK");
+	message->Go();
+
+	ResetGame();
+}
+
+void MainWindow::ResetGame()
+{
+	// Reset board array
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++)
+			board[i][j] = "";
+	}
+
+	// Set player to X
+	currentPlayer = "X";
+	DrawBoard();
+}
+
 
 void
 MainWindow::MessageReceived(BMessage *msg)
@@ -74,8 +115,12 @@ MainWindow::MessageReceived(BMessage *msg)
 			int16 col = msg->FindInt16("col");
 			if (board[row][col] == "") { // Clicked on empty cell
 				board[row][col] = currentPlayer;
-				currentPlayer = (currentPlayer == "X") ? "O" : "X";
 				DrawBoard();
+				if (CheckWin()) {
+					AnnounceWinner();
+					break;
+				}
+				currentPlayer = (currentPlayer == "X") ? "O" : "X";
 			} else {
 				BAlert *message = new BAlert("Not valid", "Please click an empty button", "OK");
 				message->Go();
