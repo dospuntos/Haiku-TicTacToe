@@ -12,7 +12,9 @@ public:
 			bool		QuitRequested(void);
 			void		DrawBoard();
 			bool 		CheckWin();
+			bool		CheckDraw();
 			void		AnnounceWinner();
+			void		AnnounceDraw();
 			void		ResetGame();
 
 private:

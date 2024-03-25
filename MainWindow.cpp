@@ -8,6 +8,7 @@
 #include <View.h>
 #include <String.h>
 #include <Size.h>
+#include <StatusBar.h>
 
 enum
 {
@@ -26,6 +27,10 @@ MainWindow::MainWindow(void)
 	fMenuBar = new BMenuBar(r,"menubar");
 	AddChild(fMenuBar);
 
+	BStatusBar *m_status_bar = new BStatusBar("m_status_bar","0%","100%");
+	m_status_bar->Show();
+
+	AddChild(m_status_bar);
 	DrawBoard();
 }
 
@@ -79,12 +84,31 @@ bool MainWindow::CheckWin()
 	return false;
 }
 
+bool MainWindow::CheckDraw()
+{
+	// Reset board array
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++)
+			if (board[i][j] == "") return false;
+	}
+	return true;
+}
+
 void
 MainWindow::AnnounceWinner()
 {
 	BString text;
 	text << "Player " << currentPlayer << " won the game!";
 	BAlert *message = new BAlert("Congratulations", text, "OK");
+	message->Go();
+
+	ResetGame();
+}
+
+void
+MainWindow::AnnounceDraw()
+{
+	BAlert *message = new BAlert("Draw", "The game ended in a draw!", "OK");
 	message->Go();
 
 	ResetGame();
@@ -118,6 +142,10 @@ MainWindow::MessageReceived(BMessage *msg)
 				DrawBoard();
 				if (CheckWin()) {
 					AnnounceWinner();
+					break;
+				}
+				if (CheckDraw()) {
+					AnnounceDraw();
 					break;
 				}
 				currentPlayer = (currentPlayer == "X") ? "O" : "X";
