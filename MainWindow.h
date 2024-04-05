@@ -12,7 +12,6 @@ public:
 						MainWindow(void);
 			void		MessageReceived(BMessage *msg);
 			bool		QuitRequested(void);
-			void		AddStatusBar(BRect frame, const char *txt);
 			void		DrawBoard();
 			bool 		CheckWin();
 			bool		CheckDraw();

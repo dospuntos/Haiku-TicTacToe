@@ -14,17 +14,17 @@
 class Status : public BView
 {
 public:
-							Status(BRect frame, const char* msg);
+							Status(BRect frame, BString msg);
 							~Status();
 
 	virtual	void 			Draw(BRect updateRect);
 
 			void 			SetOffset(int newOffset);
 
-			void			SetStatus(const char* msg);
+			void			SetStatus(BString msg);
 
 private:
-			const char*		fMsg;
+			BString			fMsg;
 			int 			fOffset;
 			float 			fBaseline;
 };

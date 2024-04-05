@@ -175,7 +175,7 @@ MainWindow::MessageReceived(BMessage *msg)
 
 				BString statusMessage = "Current player: ";
 				statusMessage << currentPlayer;
-				fStatusBar->SetStatus(statusMessage.String());
+				fStatusBar->SetStatus(statusMessage);
 			} else {
 				fStatusBar->SetStatus("Please click an empty button");
 			}

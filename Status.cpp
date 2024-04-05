@@ -26,7 +26,7 @@
 
 #include "Status.h"
 
-Status::Status(BRect frame, const char *txt)
+Status::Status(BRect frame, BString txt)
 	: BView(frame, "status", B_FOLLOW_BOTTOM | B_FOLLOW_LEFT, B_WILL_DRAW)
 {
 	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
@@ -49,7 +49,7 @@ Status::~Status()
 }
 
 void
-Status::SetStatus(const char* msg) {
+Status::SetStatus(BString msg) {
 	fMsg = msg;
 	Draw(Bounds());
 }
@@ -59,7 +59,6 @@ Status::Draw(BRect updateRect)
 {
 	BRect bounds(Bounds());
 
-	// #325 Remove old text by drawing the background first
 	FillRect(bounds,B_SOLID_LOW);
 
 	SetHighColor(tint_color(ViewColor(), B_DARKEN_2_TINT));
