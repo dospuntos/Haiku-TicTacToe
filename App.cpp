@@ -7,6 +7,7 @@ App::App(void)
 {
 	MainWindow *mainwin = new MainWindow();
 	mainwin->Show();
+	mainwin->Activate();
 }
 
 

@@ -8,7 +8,7 @@
 #include <View.h>
 #include <String.h>
 #include <Size.h>
-#include <StatusBar.h>
+#include <ScrollBar.h>
 
 enum
 {
@@ -18,20 +18,23 @@ enum
 
 BString board[3][3];
 BString currentPlayer = "X";
+int buttonWidthHeight = 180;
+
 
 MainWindow::MainWindow(void)
-	:	BWindow(BRect(100,100,380,400),"Tic Tac Toe for Haiku",B_TITLED_WINDOW, B_NOT_RESIZABLE | B_ASYNCHRONOUS_CONTROLS)
+	:	BWindow(BRect(100,100,(buttonWidthHeight * 3) + 140,(buttonWidthHeight * 3) + 160 + B_H_SCROLL_BAR_HEIGHT),
+			"Tic Tac Toe for Haiku", B_TITLED_WINDOW, B_NOT_RESIZABLE | B_ASYNCHRONOUS_CONTROLS)
 {
 
 	BRect r(Bounds());
-	r.bottom = 20;
+	r.bottom = B_H_SCROLL_BAR_HEIGHT - 1;
 	fMenuBar = new BMenuBar(r,"menubar");
 	fMenu = new BMenu("Game");
 	fMenu->AddItem(new BMenuItem(
 		"New game", new BMessage(M_NEW_GAME), 'N'));
 	fMenu->AddSeparatorItem();
 	fMenu->AddItem(new BMenuItem(
-		"About Weather", new BMessage(B_ABOUT_REQUESTED)));
+		"About Tic Tac Toe", new BMessage(B_ABOUT_REQUESTED)));
 	fMenu->AddItem(new BMenuItem(
 		"Quit", new BMessage(B_QUIT_REQUESTED), 'Q'));
 	fMenuBar->AddItem(fMenu);
@@ -39,13 +42,25 @@ MainWindow::MainWindow(void)
 	AddChild(fMenuBar);
 
 	DrawBoard();
-}
 
+	// create status bar
+	BRect s(Bounds());
+	s.top = s.Height() - B_H_SCROLL_BAR_HEIGHT;
+	fStatusBar = new Status(s, "Current player: X");
+	fStatusBar->SetExplicitMinSize(BSize(B_SIZE_UNSET,
+		B_H_SCROLL_BAR_HEIGHT - 1));
+	fStatusBar->SetExplicitMaxSize(BSize(B_SIZE_UNSET,
+		B_H_SCROLL_BAR_HEIGHT - 1));
+	fStatusBar->SetExplicitAlignment(BAlignment(B_ALIGN_USE_FULL_WIDTH,
+		B_ALIGN_BOTTOM));
+
+	AddChild(fStatusBar);
+
+}
 
 
 void
 MainWindow::DrawBoard() {
-	int buttonWidthHeight = 80;
 	int x = 10; // Start top left
 	int y = 30; // And below menu bar
 
@@ -131,6 +146,7 @@ void MainWindow::ResetGame()
 
 	// Set player to X
 	currentPlayer = "X";
+	fStatusBar->SetStatus("Current player: X");
 	DrawBoard();
 }
 
@@ -156,9 +172,12 @@ MainWindow::MessageReceived(BMessage *msg)
 					break;
 				}
 				currentPlayer = (currentPlayer == "X") ? "O" : "X";
+
+				BString statusMessage = "Current player: ";
+				statusMessage << currentPlayer;
+				fStatusBar->SetStatus(statusMessage.String());
 			} else {
-				BAlert *message = new BAlert("Not valid", "Please click an empty button", "OK");
-				message->Go();
+				fStatusBar->SetStatus("Please click an empty button");
 			}
 		} break;
 
