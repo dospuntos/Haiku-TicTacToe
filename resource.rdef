@@ -10,8 +10,8 @@ resource app_version {
 	variety = B_APPV_FINAL,
 	internal = 0,
 
-	short_info = "A short description",
-	long_info  = "A little bit longer description of the app."
+	short_info = "A small Tic-Tac-Toe game for Haiku",
+	long_info  = "This game is used as a learning project to dive into C++ and the Haiku API."
 };
 
 resource file_types message {
