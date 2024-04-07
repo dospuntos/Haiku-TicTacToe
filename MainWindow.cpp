@@ -9,6 +9,8 @@
 #include <String.h>
 #include <Size.h>
 #include <ScrollBar.h>
+#include <IconUtils.h>
+#include "icons.h"
 
 enum
 {
@@ -18,7 +20,7 @@ enum
 
 BString board[3][3];
 BString currentPlayer = "X";
-int buttonWidthHeight = 180;
+int buttonWidthHeight = 80;
 
 
 MainWindow::MainWindow(void)
@@ -47,15 +49,11 @@ MainWindow::MainWindow(void)
 	BRect s(Bounds());
 	s.top = s.Height() - B_H_SCROLL_BAR_HEIGHT;
 	fStatusBar = new Status(s, "Current player: X");
-	fStatusBar->SetExplicitMinSize(BSize(B_SIZE_UNSET,
-		B_H_SCROLL_BAR_HEIGHT - 1));
-	fStatusBar->SetExplicitMaxSize(BSize(B_SIZE_UNSET,
-		B_H_SCROLL_BAR_HEIGHT - 1));
-	fStatusBar->SetExplicitAlignment(BAlignment(B_ALIGN_USE_FULL_WIDTH,
-		B_ALIGN_BOTTOM));
+	fStatusBar->SetExplicitMinSize(BSize(B_SIZE_UNSET, B_H_SCROLL_BAR_HEIGHT - 1));
+	fStatusBar->SetExplicitMaxSize(BSize(B_SIZE_UNSET, B_H_SCROLL_BAR_HEIGHT - 1));
+	fStatusBar->SetExplicitAlignment(BAlignment(B_ALIGN_USE_FULL_WIDTH, B_ALIGN_BOTTOM));
 
 	AddChild(fStatusBar);
-
 }
 
 
@@ -71,8 +69,6 @@ MainWindow::DrawBoard() {
 		for (int col = 0; col < 3; col++)
 		{
 			if (col > 0) x = x + buttonWidthHeight + 10;
-			BString name("");
-			name << board[row][col];
 
 			BPoint start(x, y);
 			BSize size(buttonWidthHeight, buttonWidthHeight);
@@ -82,8 +78,19 @@ MainWindow::DrawBoard() {
 			msg->AddInt16("col", col);
 
 			BRect buttonSize(start, size);
-			BButton *button = new BButton(buttonSize,"button",name,msg);
-			button->SetFlat(false);
+			BButton *button = new BButton(buttonSize,"button","",msg);
+
+			// Draw icon
+			BBitmap icon(BRect(0, 0, buttonWidthHeight, buttonWidthHeight), 0, B_RGBA32);
+			if (board[row][col] == "X") {
+				BIconUtils::GetVectorIcon(kCrossIcon, sizeof(kCrossIcon), &icon);
+				button->SetIcon(&icon);
+			} else if (board[row][col] == "O") {
+				BIconUtils::GetVectorIcon(kCircleIcon, sizeof(kCircleIcon), &icon);
+				button->SetIcon(&icon);
+			}
+
+			button->SetFlat(true);
 			AddChild(button);
 		}
 	}
@@ -106,6 +113,7 @@ bool MainWindow::CheckWin()
 	return false;
 }
 
+
 bool MainWindow::CheckDraw()
 {
 	// Reset board array
@@ -115,6 +123,7 @@ bool MainWindow::CheckDraw()
 	}
 	return true;
 }
+
 
 void
 MainWindow::AnnounceWinner()
@@ -127,6 +136,7 @@ MainWindow::AnnounceWinner()
 	ResetGame();
 }
 
+
 void
 MainWindow::AnnounceDraw()
 {
@@ -135,6 +145,7 @@ MainWindow::AnnounceDraw()
 
 	ResetGame();
 }
+
 
 void MainWindow::ResetGame()
 {

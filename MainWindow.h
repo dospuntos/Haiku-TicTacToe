@@ -5,6 +5,7 @@
 #include <MenuBar.h>
 #include <Menu.h>
 #include "Status.h"
+#include <Bitmap.h>
 
 class MainWindow : public BWindow
 {
@@ -18,6 +19,7 @@ public:
 			void		AnnounceWinner();
 			void		AnnounceDraw();
 			void		ResetGame();
+			void		GetIconBitmap();
 
 private:
 			BMenuBar	*fMenuBar;
