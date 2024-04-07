@@ -20,11 +20,11 @@ enum
 
 BString board[3][3];
 BString currentPlayer = "X";
-int buttonWidthHeight = 80;
+int buttonSize = 80;
 
 
 MainWindow::MainWindow(void)
-	:	BWindow(BRect(100,100,(buttonWidthHeight * 3) + 140,(buttonWidthHeight * 3) + 160 + B_H_SCROLL_BAR_HEIGHT),
+	:	BWindow(BRect(100,100,(buttonSize * 3) + 140,(buttonSize * 3) + 160 + B_H_SCROLL_BAR_HEIGHT),
 			"Tic Tac Toe for Haiku", B_TITLED_WINDOW, B_NOT_RESIZABLE | B_ASYNCHRONOUS_CONTROLS)
 {
 
@@ -64,24 +64,22 @@ MainWindow::DrawBoard() {
 
 	for (int row = 0; row < 3; row++)
 	{
-		if (row > 0) y =  y + buttonWidthHeight + 10;
+		if (row > 0) y =  y + buttonSize + 10;
 		x = 10;
 		for (int col = 0; col < 3; col++)
 		{
-			if (col > 0) x = x + buttonWidthHeight + 10;
-
-			BPoint start(x, y);
-			BSize size(buttonWidthHeight, buttonWidthHeight);
+			if (col > 0) x = x + buttonSize + 10;
 
 			BMessage *msg = new BMessage(M_BUTTON_CLICKED);
 			msg->AddInt16("row", row);
 			msg->AddInt16("col", col);
 
-			BRect buttonSize(start, size);
-			BButton *button = new BButton(buttonSize,"button","",msg);
+			BButton *button = new BButton(BRect(BPoint(x,y), BSize(buttonSize, buttonSize)),
+								"button","",msg);
 
 			// Draw icon
-			BBitmap icon(BRect(0, 0, buttonWidthHeight, buttonWidthHeight), 0, B_RGBA32);
+			int iconSize = buttonSize * .9;
+			BBitmap icon(BRect(0, 0, iconSize - 20, iconSize - 20), 0, B_RGBA32);
 			if (board[row][col] == "X") {
 				BIconUtils::GetVectorIcon(kCrossIcon, sizeof(kCrossIcon), &icon);
 				button->SetIcon(&icon);
