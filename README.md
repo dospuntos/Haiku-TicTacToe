@@ -36,3 +36,7 @@ Start the application
 - Add computer-oponent
     - Random player
     - Inteligent player
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
